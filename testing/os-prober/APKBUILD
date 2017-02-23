@@ -1,0 +1,43 @@
+# Contributor: Henrik Riomar <henrik.riomar@gmail.com>
+# Maintainer:
+pkgname=os-prober
+pkgver=1.74
+pkgrel=0
+pkgdesc="utility to detect other OSes on a set of drives"
+url="https://anonscm.debian.org/git/d-i/os-prober.git"
+arch="x86 x86_64"
+license="GPL2+"
+depends="coreutils grub"
+makedepends=""
+install=""
+subpackages="$pkgname-doc"
+source="http://http.debian.net/debian/pool/main/o/${pkgname}/${pkgname}_${pkgver}.tar.xz"
+builddir="$srcdir/$pkgname"
+
+build() {
+	cd "$builddir"
+	make
+}
+
+package() {
+	cd "$builddir"
+	install -D -m 0755 linux-boot-prober "$pkgdir"/usr/bin/linux-boot-prober
+	install -D -m 0755 os-prober "$pkgdir"/usr/bin/os-prober
+	install -D -m 0755 newns "$pkgdir"/usr/lib/os-prober/newns
+	install -D -m 0755 common.sh "$pkgdir"/usr/share/os-prober/common.sh
+
+	for dir in os-probes os-probes/mounted os-probes/init \
+	              linux-boot-probes linux-boot-probes/mounted
+	do
+		install -d -m 0755 "$pkgdir/usr/lib/$dir"
+		install -m 0755 -t "$pkgdir/usr/lib/$dir" "$dir"/common/*
+		if [ -d "$dir"/x86 ]; then
+			cp -r "$dir"/x86/* "$pkgdir/usr/lib/$dir/"
+		fi
+	done
+
+	install -d -m 0755 "$pkgdir"/var/lib/os-prober
+
+	install -D -m 0644 README "$pkgdir"/usr/share/doc/${pkgname}/README
+}
+sha512sums="5407fb3c782ae0532120995d60cfc307028de9bea52ce5534baaf940a99269b735c1174ef0f7a5316be485a1e8bfd097108c2819eadf00e2e38595bfc2c22245  os-prober_1.74.tar.xz"
