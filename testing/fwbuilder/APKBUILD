@@ -7,15 +7,19 @@ pkgdesc="GUI firewall management application"
 url="https://github.com/fwbuilder/fwbuilder"
 arch="all"
 license="GPL-2.0-or-later"
+checkdepends="cppunit-dev"
 makedepends="automake autoconf libtool libxml2-dev libxslt-dev net-snmp-dev qt5-qtbase-dev qt5-qttools-dev"
-source="${pkgname}-${pkgver}.tar.gz::https://github.com/$pkgname/$pkgname/archive/v${pkgver}.tar.gz"
+source="${pkgname}-${pkgver}.tar.gz::https://github.com/$pkgname/$pkgname/archive/v${pkgver}.tar.gz
+	fix-qt5-compile-error.patch
+	Detect-qmake-qt5-automatically.patch
+	unit_tests-fix-qt5-compile-error.patch
+	"
 builddir="$srcdir/$pkgname-$pkgver"
 
 prepare() {
 	default_prepare
 	cd "$builddir"
-	export PATH="$PATH:/usr/lib/qt5/bin"
-	CPPFLAGS="$CPPFLAGS -I/usr/include/QtWidgets" ./autogen.sh --prefix=/usr
+	./autogen.sh --prefix=/usr
 }
 
 build() {
@@ -34,4 +38,7 @@ package() {
 	make INSTALL_ROOT="$pkgdir" install
 }
 
-sha512sums="d6504ddab17e80cb332f005b6bbb16c15a7b4735361733f0e0437cb94059a5c9039e563be6e0e8d328954db2416b2c0bdbb8afa36cd946f61e7c7edaee47453b  fwbuilder-5.3.7.tar.gz"
+sha512sums="d6504ddab17e80cb332f005b6bbb16c15a7b4735361733f0e0437cb94059a5c9039e563be6e0e8d328954db2416b2c0bdbb8afa36cd946f61e7c7edaee47453b  fwbuilder-5.3.7.tar.gz
+c28f4447428045203675fc51b3427a998feb2748c58fef3fa8216ccb847966a964ec30afd97d95fca0362c2fbcbee6e8f227e625fda495e64238b23011fb4865  fix-qt5-compile-error.patch
+2ffba6932840199de80c566d79d2ef08ab72a1db600caa4342f7a76534622b1b2dae60c8127147fce500951759c4cf76bfa775909556549f43b6edc39fdaf77b  Detect-qmake-qt5-automatically.patch
+2e44ce1d56b1e3c3cc5865f33c410971fd48f0d45854b87d263d5e86de694640b624759d15d976b17448754e8abcfbb616ae511cfdc203700d972e67d7f8aa07  unit_tests-fix-qt5-compile-error.patch"

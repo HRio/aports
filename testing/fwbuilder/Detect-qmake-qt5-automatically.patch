@@ -1,0 +1,31 @@
+From a8f0f686368704964f31c41829613327a1809dab Mon Sep 17 00:00:00 2001
+From: Patrick Monnerat <patrick@monnerat.net>
+Date: Mon, 5 Mar 2018 20:00:55 +0100
+Subject: [PATCH] Detect qmake-qt5 automatically.
+
+---
+ configure.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/configure.in b/configure.in
+index 27ea0cac..e16ebb1e 100644
+--- a/configure.in
++++ b/configure.in
+@@ -68,9 +68,12 @@ if test -n "$with_qmake"; then
+ else
+     AC_PATH_PROG(QMAKE,  qmake,      ,[$EXTENDED_PATH])
+     if test -z "$QMAKE"; then
+-        AC_PATH_PROG(QMAKE,  qmake-qt4,      ,[$EXTENDED_PATH])
++        AC_PATH_PROG(QMAKE,  qmake-qt5,      ,[$EXTENDED_PATH])
+         if test -z "$QMAKE"; then
+-            AC_MSG_ERROR("Could not find qmake")
++            AC_PATH_PROG(QMAKE,  qmake-qt4,      ,[$EXTENDED_PATH])
++            if test -z "$QMAKE"; then
++                AC_MSG_ERROR("Could not find qmake")
++            fi
+         fi
+     fi
+ fi
+-- 
+2.16.2
+

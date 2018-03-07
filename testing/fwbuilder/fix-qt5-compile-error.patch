@@ -1,0 +1,21 @@
+From 89d0372e18946927affc3605b500a7de915133ff Mon Sep 17 00:00:00 2001
+From: Fred Trotter <fred.trotter@gmail.com>
+Date: Thu, 25 Jan 2018 13:25:32 -0600
+Subject: [PATCH] fix qt5 compile error
+
+---
+ fwbuilder3.pro | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/fwbuilder3.pro b/fwbuilder3.pro
+index e3f95828..508792f6 100644
+--- a/fwbuilder3.pro
++++ b/fwbuilder3.pro
+@@ -19,3 +19,4 @@ clean_tests.commands = ./unit_tests.sh make clean_tests
+ 
+ QMAKE_EXTRA_TARGETS += build_tests run_tests clean_tests tests 
+ 
++QT += widgets
+-- 
+2.16.2
+

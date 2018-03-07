@@ -1,0 +1,23 @@
+From 245e7cef1d98f7671f9b7a7c376a79a0424cd400 Mon Sep 17 00:00:00 2001
+From: Henrik Riomar <henrik.riomar@gmail.com>
+Date: Wed, 7 Mar 2018 07:57:05 +0100
+Subject: [PATCH] unit_tests: fix qt5 compile error
+
+---
+ src/unit_tests/main/main.pro | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/unit_tests/main/main.pro b/src/unit_tests/main/main.pro
+index e0b531b6..1fc7bcba 100644
+--- a/src/unit_tests/main/main.pro
++++ b/src/unit_tests/main/main.pro
+@@ -44,4 +44,5 @@ build_tests.depends = all
+ clean_tests.depends = clean 
+ QMAKE_EXTRA_TARGETS += run_tests build_tests clean_tests
+ 
+-
++QT += widgets
++QT += printsupport
+-- 
+2.16.2
+
