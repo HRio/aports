@@ -1,23 +1,91 @@
-From 245e7cef1d98f7671f9b7a7c376a79a0424cd400 Mon Sep 17 00:00:00 2001
+From 65725a0349835c897a299fa04889784c5d1a6a31 Mon Sep 17 00:00:00 2001
 From: Henrik Riomar <henrik.riomar@gmail.com>
 Date: Wed, 7 Mar 2018 07:57:05 +0100
 Subject: [PATCH] unit_tests: fix qt5 compile error
 
 ---
- src/unit_tests/main/main.pro | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ src/unit_tests/TagServiceDialogTest/TagServiceDialogTest.pro | 2 +-
+ src/unit_tests/main/main.pro                                 | 2 +-
+ src/unit_tests/tests_common.pri                              | 5 +++++
+ src/unit_tests/unit_tests.pro                                | 2 ++
+ 4 files changed, 9 insertions(+), 2 deletions(-)
 
+diff --git a/src/unit_tests/TagServiceDialogTest/TagServiceDialogTest.pro b/src/unit_tests/TagServiceDialogTest/TagServiceDialogTest.pro
+index 31a7ab95..6ab7615f 100644
+--- a/src/unit_tests/TagServiceDialogTest/TagServiceDialogTest.pro
++++ b/src/unit_tests/TagServiceDialogTest/TagServiceDialogTest.pro
+@@ -1,6 +1,6 @@
+ include(../tests_common.pri)
+ 
+-QT += testlib network gui
++QT += testlib network gui widgets printsupport
+ TARGET = TagServiceDialogTest
+ SOURCES += main_TagServiceDialogTest.cpp \
+     TagServiceDialogTest.cpp
 diff --git a/src/unit_tests/main/main.pro b/src/unit_tests/main/main.pro
-index e0b531b6..1fc7bcba 100644
+index e0b531b6..9175d150 100644
 --- a/src/unit_tests/main/main.pro
 +++ b/src/unit_tests/main/main.pro
-@@ -44,4 +44,5 @@ build_tests.depends = all
+@@ -44,4 +44,4 @@ build_tests.depends = all
  clean_tests.depends = clean 
  QMAKE_EXTRA_TARGETS += run_tests build_tests clean_tests
  
 -
-+QT += widgets
-+QT += printsupport
++QT += widgets printsupport
+diff --git a/src/unit_tests/tests_common.pri b/src/unit_tests/tests_common.pri
+index 023598b4..8351cdfe 100644
+--- a/src/unit_tests/tests_common.pri
++++ b/src/unit_tests/tests_common.pri
+@@ -23,6 +23,7 @@ INCLUDEPATH += ../../.. \
+                ../../iptlib \
+                ../../pflib \
+                ../../cisco_lib \
++               ../../juniper_lib \
+                ../../libfwbuilder/src
+ 
+ DEPENDPATH  += ../../.. \
+@@ -36,6 +37,7 @@ DEPENDPATH  += ../../.. \
+                ../../iptlib \
+                ../../pflib \
+                ../../cisco_lib \
++               ../../juniper_lib \
+                ../../libfwbuilder/src
+ 
+ run_tests.commands = echo "Running tests..."; ./${TARGET}
+@@ -52,6 +54,7 @@ DEPENDPATH = ../../common \
+     ../../iptlib \
+     ../../pflib \
+     ../../cisco_lib/ \
++    ../../juniper_lib/ \
+     ../../compiler_lib \
+     ../../libgui \
+     ../../libfwbuilder/src/fwbuilder \
+@@ -65,6 +68,7 @@ STATIC_LIBS += \
+     ../../iptlib/libiptlib.a \
+     ../../pflib/libfwbpf.a \
+     ../../cisco_lib/libfwbcisco.a \
++    ../../juniper_lib/libfwbjuniper.a \
+     ../../compiler_lib/libcompilerdriver.a \
+     ../../libfwbuilder/src/fwcompiler/libfwcompiler.a \
+     ../../libfwbuilder/src/fwbuilder/libfwbuilder.a \
+@@ -77,6 +81,7 @@ PRE_TARGETDEPS += ../../common/libcommon.a \
+     ../../iptlib/libiptlib.a \
+     ../../pflib/libfwbpf.a \
+     ../../cisco_lib/libfwbcisco.a \
++    ../../juniper_lib/libfwbjuniper.a \
+     ../../compiler_lib/libcompilerdriver.a \
+     ../../parsers/libfwbparser.a \
+     ../../import/libimport.a \
+diff --git a/src/unit_tests/unit_tests.pro b/src/unit_tests/unit_tests.pro
+index c290f026..9270ea99 100644
+--- a/src/unit_tests/unit_tests.pro
++++ b/src/unit_tests/unit_tests.pro
+@@ -13,3 +13,5 @@ build_tests.depends = libgui
+ run_tests.depends = libgui
+ 
+ QMAKE_EXTRA_TARGETS += libgui run_tests clean_tests build_tests
++
++QT += widgets printsupport
 -- 
 2.16.2
 
