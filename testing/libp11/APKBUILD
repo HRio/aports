@@ -1,0 +1,38 @@
+# Contributor: Henrik Riomar <henrik.riomar@gmail.com>
+# Maintainer:
+pkgname=libp11
+pkgver=0.4.10
+pkgrel=0
+pkgdesc="PKCS#11 wrapper library"
+url="https://github.com/OpenSC/libp11"
+arch="all"
+license="LGPL-2.1"
+checkdepends="libexecinfo-dev opensc softhsm"
+depends_dev="openssl-dev"
+makedepends="$depends_dev pkgconf"
+subpackages="$pkgname-dev $pkgname-doc"
+source="libp11-$pkgver.tar.gz::https://github.com/OpenSC/libp11/releases/download/$pkgname-$pkgver/$pkgname-$pkgver.tar.gz
+	add-needed-include-for-getpid.patch
+	"
+builddir="$srcdir/$pkgname-$pkgver"
+
+build() {
+	cd "$builddir"
+	./configure --prefix=/usr
+	make
+}
+
+check() {
+	cd "$builddir"
+	echo "running check"
+	make -j1 check
+	exit 42 # tests not working yet, want to keep logs
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" install
+}
+
+sha512sums="7005dbbab170dff48bee99de67ab9ffbfd2004f4b5150a0a67717aabb30eb93a34495b6d084da5d05162dd8666e8ff4c451d0d153ee4dd5422b59f6f6ca2130c  libp11-0.4.10.tar.gz
+586c19dd6d5a0433b1965ab08e471aec004020131cba667d05af1bf110405105aa6d7344d60f12a25e66bfc32ad406150fcc6f27c06de3baf2383fb289ab921f  add-needed-include-for-getpid.patch"

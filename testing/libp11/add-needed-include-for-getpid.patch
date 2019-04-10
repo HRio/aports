@@ -1,0 +1,28 @@
+From c76950eefb2b0f49d7978d1e1daba03975e6dceb Mon Sep 17 00:00:00 2001
+From: Henrik Riomar <henrik.riomar@gmail.com>
+Date: Wed, 10 Apr 2019 13:54:17 +0200
+Subject: [PATCH] add needed include for getpid()
+
+Fixes:
+ p11_atfork.c: In function '_P11_get_forkid':
+ p11_atfork.c:78:9: warning: implicit declaration of function 'getpid'; did you mean 'getenv'? [-Wimplicit-function-declaration]
+  return getpid();
+---
+ src/p11_atfork.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/p11_atfork.c b/src/p11_atfork.c
+index 8fc8689..43c38f7 100644
+--- a/src/p11_atfork.c
++++ b/src/p11_atfork.c
+@@ -23,6 +23,7 @@
+ #include "libp11-int.h"
+ 
+ #ifndef _WIN32
++#include <unistd.h>
+ 
+ #ifndef __STDC_VERSION__
+ /* older than C90 */
+-- 
+2.21.0
+
