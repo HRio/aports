@@ -1,0 +1,4 @@
+# Configuration for /etc/init.d/mcelog
+
+# Additional options to pass into mcelog(8).
+# MCELOG_OPTS=""

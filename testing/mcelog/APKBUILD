@@ -1,0 +1,36 @@
+# Contributor: Henrik Riomar <henrik.riomar@gmail.com>
+# Maintainer: Henrik Riomar <henrik.riomar@gmail.com>
+pkgname=mcelog
+pkgver=162
+pkgrel=0
+pkgdesc="x86 Machine Check Exceptions collector and decoder"
+url="https://www.mcelog.org/"
+arch="x86_64"
+license="GPL-2.0-only"
+makedepends="linux-headers"
+install=""
+subpackages="$pkgname-doc $pkgname-openrc"
+source="https://git.kernel.org/pub/scm/utils/cpu/mce/mcelog.git/snapshot/mcelog-$pkgver.tar.gz
+	$pkgname.initd
+	$pkgname.confd
+	"
+builddir="$srcdir/mcelog-$pkgver"
+options="!check" # test suite requires root
+
+build() {
+	make
+}
+
+check() {
+	make test
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+	install -Dm755 "$srcdir"/"$pkgname".initd "$pkgdir"/etc/init.d/"$pkgname"
+	install -Dm755 "$srcdir"/"$pkgname".confd "$pkgdir"/etc/conf.d/"$pkgname"
+}
+
+sha512sums="d61a0b7ad3974098963edde1e9e9acdf4dbd1a025577b7044bafc17302abd19080c8145a2700c691400af0768ff4b6833d47697e1478c5bef8831f7f8b61ae48  mcelog-162.tar.gz
+1de8d549f25fd5713891472ac4ee86b85954d13b2b666cca7fd94766d42034d1460ca0bf05fd15e8cf29fa6dd4738bc524f64d9702da20f67520f0b390d0c63e  mcelog.initd
+85f7e46f8b9d1b4d1308c4e33ea9368cde4156bfd1ceb89b6977468ac9d9520fe6689aa8913261259496eb2d5765f35ba48d615baac32a7dc4ecedef25d510b7  mcelog.confd"

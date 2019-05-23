@@ -1,0 +1,21 @@
+#!/sbin/openrc-run
+
+description="x86 Machine Check Exceptions collector and decoder"
+
+pidfile=/run/$RC_SVCNAME.pid
+command=/usr/sbin/mcelog
+command_args="--pidfile $pidfile --daemon $MCELOG_OPTS"
+
+depend() {
+	need localmount
+}
+
+start_pre() {
+	if [ ! -r /dev/mcelog ]; then
+		echo "/dev/mcelog not active"
+		exit 0
+	fi
+	if ! /usr/sbin/mcelog --is-cpu-supported; then
+		exit 0
+	fi
+}
