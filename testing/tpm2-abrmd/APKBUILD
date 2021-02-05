@@ -2,12 +2,12 @@
 # Maintainer: Olliver Schinagl <oliver@schinagl.nl>
 pkgname="tpm2-abrmd"
 pkgver="2.3.2"
-pkgrel=0
+pkgrel=1
 pkgdesc="TPM2 Access Broker & Resource Management Daemon implementing the TCG spec."
 url="https://github.com/tpm2-software/tpm2-abrmd"
 arch="all"
 license="BSD-2-Clause"
-depends="libtss2-tcti-armbd"
+depends="dbus libtss2-tcti-armbd"
 makedepends="
 	autoconf
 	autoconf-archive
@@ -15,13 +15,17 @@ makedepends="
 	glib-dev
 	tpm2-tss-dev
 "
+install="$pkgname.pre-install"
 options="!check"  # Requires IBM TPM simulator
-subpackages="libtss2-tcti-armbd:libs ${pkgname}-dev ${pkgname}-doc"
-source="${pkgname}-${pkgver}.tar.gz::https://github.com/tpm2-software/tpm2-abrmd/archive/${pkgver}.tar.gz"
+subpackages="libtss2-tcti-armbd:libs ${pkgname}-dev ${pkgname}-doc $pkgname-openrc"
+source="$pkgname-$pkgver.tar.gz::https://github.com/tpm2-software/tpm2-abrmd/archive/$pkgver.tar.gz
+	$pkgname.initd
+	$pkgname.confd
+	"
 
 prepare() {
-	default_prepare
 	echo "${pkgver}" > "VERSION"
+	default_prepare
 	autoreconf --install --sym
 }
 
@@ -29,12 +33,20 @@ build() {
 	./configure \
 		--build="${CBUILD}" \
 		--host="${CHOST}" \
-		--prefix="/usr"
+		--prefix="/usr" \
+		--with-dbuspolicydir=/etc/dbus-1 \
+		--with-systemdpresetdisable
 	make
 }
 
 package() {
 	make DESTDIR="${pkgdir}" install
+	rm -rf "$pkgdir"/usr/lib/systemd
+
+	install -m755 -D "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/$pkgname
+	install -m644 -D "$srcdir"/$pkgname.confd "$pkgdir"/etc/conf.d/$pkgname
 }
 
-sha512sums="f6c87e820890a082ce99da4ec9d71a4f084d1ff86f9ed66bebadc35762b1ce1954ab295e839444a09df76970ab17b47c7d49676a3d0355aaeee931a53980ea5b  tpm2-abrmd-2.3.2.tar.gz"
+sha512sums="f6c87e820890a082ce99da4ec9d71a4f084d1ff86f9ed66bebadc35762b1ce1954ab295e839444a09df76970ab17b47c7d49676a3d0355aaeee931a53980ea5b  tpm2-abrmd-2.3.2.tar.gz
+83b6e4681b1b287e53b0808a64b0ae45544516a59c1702fc4bbf927f497a7fb5380f90fe943bd80933b633e5116bdd341aca7ef01c13d07fa8f24c2765f20055  tpm2-abrmd.initd
+ca7c4782ccc3ee7592bb4b24a6a81c624d22969cf9b9e1c3e22d45e85d3720836b1f22735ccf2ba51258c6eb0b30c4d88d7bed893f58b1aac7423fb7013529f9  tpm2-abrmd.confd"
